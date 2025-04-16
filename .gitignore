@@ -1,0 +1,10 @@
+# Ignore Python cache
+
+__pycache__/
+*.py[cod]
+
+# Ignore real config file
+config.py
+
+venv/
+Concept.pdf
