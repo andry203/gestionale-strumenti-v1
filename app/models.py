@@ -9,8 +9,8 @@ class Utente (UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
-    ruolo = db.Column(db.Enum('admin', 'responsabile', 'user'), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    ruolo = db.Column(db.Enum('admin', 'responsabile', 'user'), nullable=False, default='user')
 
     richieste = db.relationship('Richiesta', backref='utente', lazy=True)
 

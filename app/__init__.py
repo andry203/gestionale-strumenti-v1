@@ -2,7 +2,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import config
-from app.routes import auth, strumenti, richieste, utenti
 
 # Initialization extensions
 
@@ -25,14 +24,21 @@ def create_app():
     login_manager.init_app(app)
 
     from app import models
+    from app.models import Utente
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return Utente.query.get(int(user_id))
 
     # Configure Flask-Login
 
-    login_manager.login_view = 'auth.login'                     # nome della route di login                         REMOVE COMMENT
-    login_manager.login_message_category = 'info'               # stile messaggio (usato nei flash messages)        REMOVE COMMENT
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message_category = 'info'
 
     # Blueprint registrations
     
+    from app.routes import auth, strumenti, richieste, utenti
+
     app.register_blueprint(auth.bp)
     # app.register_blueprint(strumenti.bp)
     # app.register_blueprint(richieste.bp)
