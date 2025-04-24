@@ -1,5 +1,6 @@
 from app import db
 from flask_login import UserMixin
+from datetime import date
 
 # Table 'utenti'
 
@@ -48,7 +49,7 @@ class Richiesta (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_utente = db.Column(db.Integer, db.ForeignKey('utenti.id'), nullable=False)
     id_strumento = db.Column(db.Integer, db.ForeignKey('strumenti.id'), nullable=False)
-    data_richiesta = db.Column(db.Date, nullable=False)
+    data_richiesta = db.Column(db.Date, nullable=False, default=date.today)
     status = db.Column(db.Enum('in attesa', 'approvata', 'rifiutata'), nullable=False, default='in attesa')
     note = db.Column(db.Text, nullable=True)
 

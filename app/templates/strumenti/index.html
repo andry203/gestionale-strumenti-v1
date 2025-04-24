@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Lista Strumenti{% endblock %}
+
+{% block content %}
+  <h1>Lista Strumenti</h1>
+
+  <!-- Campo di ricerca client‐side -->
+  <input id="search" type="text" placeholder="Filtra strumenti..." 
+         style="margin-bottom:1em; padding:0.5em; width: 100%; max-width: 400px;">
+
+  <table id="strumenti-table" border="1" cellpadding="5" cellspacing="0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Marca</th>
+        <th>Modello</th>
+        <th>Serial Number</th>
+        <th>Caratteristiche</th>
+        <th>Data Calibrazione</th>
+        <th>Status</th>
+        <th>Prelevato da</th>
+        <th>Note</th>
+        <th>Richiedi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in strumenti %}
+        <tr>
+          <td>{{ s.id }}</td>
+          <td>{{ s.tipo }}</td>
+          <td>{{ s.marca }}</td>
+          <td>{{ s.modello }}</td>
+          <td>{{ s.serial_number }}</td>
+          <td class="cell-caratteristiche">{{ s.caratteristiche or '-' }}</td>
+          <td>
+            {% if s.data_calibrazione %}
+              {{ s.data_calibrazione.strftime('%d/%m/%Y') }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>{{ s.status }}</td>
+          <td>{{ s.prelevato_da or '-' }}</td>
+          <td>{{ s.note or '-' }}</td>
+          <td>
+            {% if s.status == 'disponibile' and current_user.is_authenticated %}
+            <form action="{{ url_for('strumenti.richiedi', id=s.id) }}" method="post" style="display:inline;" class="richiedi-form"
+                  data-nome="{{ s.tipo }} {{ s.modello }}">
+              <!-- CSRF token se lo usi -->
+              <input type="hidden" name="note" value="">
+              <button type="button" class="btn-richiedi">Richiedi</button>
+            </form>
+            {% elif not current_user.is_authenticated %}
+              <p>Login per richiedere</p>
+            {% else %}
+              <span>Non disponibile</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>    
+  </table>
+
+  <script src="{{ url_for('static', filename='js/strumenti.js') }}" defer></script>
+
+{% endblock %}

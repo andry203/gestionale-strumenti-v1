@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from app.routes import dashboard
 from config import config
 
 # Initialization extensions
@@ -37,11 +38,11 @@ def create_app():
 
     # Blueprint registrations
     
-    from app.routes import auth, strumenti, richieste, utenti
+    from app.routes import auth, strumenti, richieste, dashboard
 
     app.register_blueprint(auth.bp)
-    # app.register_blueprint(strumenti.bp)
-    # app.register_blueprint(richieste.bp)
-    # app.register_blueprint(utenti.bp)
+    app.register_blueprint(strumenti.bp)
+    app.register_blueprint(richieste.bp)
+    app.register_blueprint(dashboard.bp)
 
     return app
