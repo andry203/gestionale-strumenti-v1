@@ -2,22 +2,52 @@
 {% block title %}Lista Richieste{% endblock %}
 
 {% block content %}
-  <h1>Lista delle tue richieste</h1>
+  <h2>Lista delle tue richieste</h2>
+  <p> Puoi vedere le tue richieste ed annullare eventuali richieste se e solo se
+     lo status è ancora "in attesa".</p>
 
-    <!-- Trasformare in table -->
-    <!-- Con pulsante per annullare la richiesta, solamente se lo status
-      è ancora "in attesa" -->
+  <table id="strumenti-richieste" border="1" cellpadding="5" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Data richiesta</th>
+        <th>Strumento</th>
+        <th>Marca</th>
+        <th>Modello</th>
+        <th>Serial Number</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in richieste %}
+      <tr>
+        <td>{{ r.data_richiesta}}</td>
+        <td>{{ r.strumento.tipo }}</td>
+        <td>{{ r.strumento.marca }}</td>
+        <td>{{ r.strumento.modello }}</td>
+        <td>{{ r.strumento.serial_number }}</td>
+        <td>{{ r.status }}</td>
+        <td>
+          {% if r.status == 'in attesa' and current_user.is_authenticated %}
+            <form action="{{ url_for('richieste.delete', id=r.id) }}" method="post" style="display:inline;" class="annulla-form"
+                  data-nome="{{ r.strumento.tipo }} {{ r.strumento.modello }}">
+              <button type="button" class="btn-annulla">Annulla richiesta</button>
+            </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-  <ul>
-    {% for r in richieste %}
-      <li>
-        Richiesta del {{ r.data_richiesta }}:
-        {{ r.strumento.tipo }}
-        {{ r.strumento.marca }}
-        {{ r.strumento.modello }}
-        (SN: {{ r.strumento.serial_number }})
-        (Status: {{ r.status }})
-      </li>
-    {% endfor %}
-  </ul>
-{% endblock %}
+  <script>
+    document.querySelectorAll('.btn-annulla').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const nome = btn.closest('form').dataset.nome;
+        if (confirm(`Sei sicuro di voler annullare la richiesta per ${nome}?`)) {
+          btn.closest('form').submit();
+        }
+      });
+    });
+    </script>
+    
+  {% endblock %}

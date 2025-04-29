@@ -43,22 +43,21 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
 
-    next_page = request.args.get('next') or request.form.get('next') or url_for('auth.homepage')
-
     if request.method == 'POST':
+        next_page = request.form.get('next') or url_for('auth.homepage')
         email = request.form['email']
-        pwd = request.form['password']
-        user = Utente.query.filter_by(email=email).first()
+        pwd   = request.form['password']
+        user  = Utente.query.filter_by(email=email).first()
 
         if not user or not check_password_hash(user.password, pwd):
-            flash ('Credenziali errate', 'danger')
-            return redirect(url_for('auth.homepage'))
-        
+            flash('Credenziali errate', 'danger')
+            return redirect(request.referrer or url_for('auth.homepage'))
+
         login_user(user)
-        flash ('Login eseguito!', 'success')
+        flash('Login eseguito!', 'success')
         return redirect(next_page)
-    
-    return render_template('login.html', next=next_page)
+
+    return redirect(url_for('auth.homepage'))
 
 
 # Logout route 

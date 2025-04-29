@@ -19,3 +19,25 @@ def index():
                      .all())
     print(user_requests)
     return render_template('richieste/index.html', richieste=user_requests)
+
+
+# Delete request route 
+
+@bp.route('/<int:id>/delete', methods=['POST'])
+@login_required
+def delete(id):
+
+    richiesta = Richiesta.query.get_or_404(id)
+    if richiesta.id_utente != current_user.id:
+        flash('Non puoi eliminare questa richiesta.', 'danger')
+        return redirect(request.referrer or '/richieste')
+    
+    elif richiesta.status != 'in attesa':
+        flash('Non puoi più annullare la richiesta.')
+        return redirect(request.referrer or '/richieste')
+
+    db.session.delete(richiesta)
+    db.session.commit()
+
+    flash('Richiesta eliminata con successo.', 'success')
+    return redirect(request.referrer or '/richieste')

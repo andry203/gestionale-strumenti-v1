@@ -40,7 +40,7 @@
   <body>
     {% with msgs = get_flashed_messages(with_categories=true) %}
       {% if msgs %}
-        <ul>
+        <ul id="flashes">
           {% for cat, msg in msgs %}
             <li class="{{ cat }}">{{ msg }}</li>
           {% endfor %}
@@ -49,5 +49,22 @@
     {% endwith %}
 
     {% block content %}{% endblock %}
+
+    <!-- JS script for flash messages -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const flashContainer = document.getElementById('flashes');
+        if (!flashContainer) return;
+        // Dopo 3 secondi fai scomparire gradualmente
+        setTimeout(() => {
+          // puoi fare direttamente display:none oppure una dissolvenza via JS/CSS
+          flashContainer.style.transition = 'opacity 0.5s ease';
+          flashContainer.style.opacity = '0';
+          // dopo la dissolvenza, rimuovi il contenitore per non occupare spazio
+          setTimeout(() => flashContainer.remove(), 500);
+        }, 3000);
+      });
+    </script>
+
   </body>
 </html>

@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Admin Dashboard</h1>
+
+    <p>Gestione strumentazione, richieste e ruoli utenti</p>
+
+    <button id="btn-apri-aggiungi">Aggiungi nuovo strumento</button>
+
+    <!-- Campo di ricerca client‐side -->
+    <input id="search" type="text" placeholder="Filtra strumenti..." 
+    style="margin-bottom:1em; padding:0.5em; width: 100%; max-width: 400px;">
+
+    <!-- Tabella strumentazione -->
+
+    <table id="strumenti-table" border="1" cellpadding="5" cellspacing="0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Marca</th>
+            <th>Modello</th>
+            <th>Serial Number</th>
+            <th>Caratteristiche</th>
+            <th>Data Calibrazione</th>
+            <th>Status</th>
+            <th>Prelevato da</th>
+            <th>Note</th>
+            <th>Modifica strumento</th>
+            <th>Elimina strumento</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for s in strumenti %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.tipo }}</td>
+                    <td>{{ s.marca }}</td>
+                    <td>{{ s.modello }}</td>
+                    <td>{{ s.serial_number }}</td>
+                    <td class="cell-caratteristiche">{{ s.caratteristiche or '-' }}</td>
+                    <td>{{ s.data_calibrazione }}</td>
+                    <td>{{ s.status }}</td>
+                    <td>{{ s.prelevato_da or '-' }}</td>
+                    <td>{{ s.note or '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('dashboard.modifica', id=s.id) }}"
+                        class="btn-modifica"
+                        data-id="{{ s.id }}"
+                        data-tipo="{{ s.tipo }}"
+                        data-marca="{{ s.marca }}"
+                        data-modello="{{ s.modello }}"
+                        data-serial="{{ s.serial_number }}"
+                        data-caratteristiche="{{ s.caratteristiche }}"
+                        data-data_calib="{{ s.data_calibrazione }}"
+                        data-note="{{ s.note }}">
+                        Modifica
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('dashboard.elimina', id=s.id) }}"
+                        class="btn-elimina"
+                        data-nome="{{ s.tipo }} {{ s.modello }}">
+                        Elimina
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+
+    <!-- Tabella richieste -->
+
+    <table id="richieste-table" border="1" cellpadding="5" cellspacing="0">
+        <thead>
+          <tr>
+            <th>ID richiesta</th>
+            <th>Strumento</th>
+            <th>Serial Number</th>
+            <th>Richiesto da</th>
+            <th>Data richiesta</th>
+            <th>Note</th>
+            <th>Status</th>
+            <th>Modifica</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for r in richieste %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.strumento.tipo }}</td>
+                    <td>{{ r.strumento.serial_number }}</td>
+                    <td>{{ r.utente.email }}</td>
+                    <td>{{ r.data_richiesta }}</td>
+                    <td>{{ r.note or '-' }}</td>
+                    <td>{{ r.status }}</td>
+                    <td>
+                        {% if r.status == 'in attesa' %}
+                        <button
+                            class="btn-cambia-stato"
+                            data-id="{{ r.id }}"
+                            data-strumento="{{ r.strumento.tipo }} {{ r.strumento.serial_number }}"
+                            data-url="{{ url_for('dashboard.aggiorna_status_richiesta', id=r.id) }}">
+                            Modifica
+                        </button>
+                        {% else %}
+                        -- Non modificabile --
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+
+    <!-- Cambio ruolo -->
+
+    <h2>Gestione Ruoli Utenti</h2>
+
+    <form action="{{ url_for('dashboard.cambia_ruolo') }}" method="post" style="display:flex; gap:0.5em; align-items:center;">
+        <div style="display:flex; gap:1em; align-items:flex-end;">
+            <div>
+                <label for="email-search">Cerca utente:</label><br>
+                <input id="email-search" type="text" placeholder="filtra email..." style="min-width:200px;">
+                <select id="email-utente" name="email" required size="5" style="min-width:200px;">
+                  {% for u in utenti %}
+                    <option value="{{ u.email }}">{{ u.email }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+          
+            <div>
+              <label for="seleziona-ruolo">Ruolo:</label><br>
+              <select id="seleziona-ruolo" name="ruolo" required>
+                <option value="" disabled selected>— seleziona —</option>
+                <option value="admin">Admin</option>
+                <option value="responsabile">Responsabile</option>
+                <option value="user">User</option>
+              </select>
+            </div>
+          
+            <div style="margin-bottom:1.6em;">
+              <button type="submit">Salva</button>
+            </div>
+        </div>  
+    </form>
+      
+
+    <!-- Modal aggiunta -->
+    <div id="modal-aggiungi" style="display:none; position:fixed;
+        top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);
+        align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:1em; border-radius:8px; width:320px;">
+            <h2>Nuovo Strumento</h2>
+            <form action="{{ url_for('dashboard.aggiungi') }}" method="post">
+                <!-- Se usi CSRF, qui va il token -->
+                <label>Tipo:<br>
+                    <input type="text" name="tipo" required>
+                </label><br>
+                <label>Marca:<br>
+                    <input type="text" name="marca" required>
+                </label><br>
+                <label>Modello:<br>
+                    <input type="text" name="modello" required>
+                </label><br>
+                <label>Serial Number:<br>
+                    <input type="text" name="serial_number" required>
+                </label><br>
+                <label>Caratteristiche:<br>
+                    <textarea name="caratteristiche"></textarea>
+                </label><br>
+                <label>Data calibrazione:<br>
+                    <input type="date" name="data_calibrazione">
+                </label><br><br>
+                <button type="submit">Salva</button>
+                <button type="button" id="btn-chiudi-aggiungi">Annulla</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal modifica -->
+    <div id="modal-modifica" style="display:none;position:fixed;top:0;left:0;
+            width:100%;height:100%;background:rgba(0,0,0,0.5);
+            align-items:center;justify-content:center;">
+        <div style="background:#fff;padding:1em;border-radius:8px;width:320px;">
+            <h2>Modifica Strumento</h2>
+            <form id="form-modifica" method="post" action="">
+                <label>Tipo:<br><input type="text" name="tipo" required></label><br>
+                <label>Marca:<br><input type="text" name="marca" required></label><br>
+                <label>Modello:<br><input type="text" name="modello" required></label><br>
+                <label>Serial Number:<br><input type="text" name="serial_number" required></label><br>
+                <label>Caratteristiche:<br><textarea name="caratteristiche"></textarea></label><br>
+                <label>Data calibraz.:<br><input type="date" name="data_calibrazione"></label><br>
+                <label>Note:<br><textarea name="note"></textarea></label><br><br>
+                <button type="submit">Salva</button>
+                <button type="button" id="btn-chiudi-modifica">Annulla</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal per cambio status -->
+    <div id="modal-stato" style="display:none;
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:1em; border-radius:8px; width:300px;">
+            <h2>Cambia Stato</h2>
+            <form id="form-stato" method="post" action="">
+                <p id="info-richiesta"></p>
+                <label>Status:<br>
+                    <select name="status" required>
+                        <option value="">-- seleziona --</option>
+                        <option value="approvata">Approva</option>
+                        <option value="rifiutata">Rifiuta</option>
+                    </select>
+                </label><br><br>
+                <button type="submit">Conferma</button>
+                <button type="button" id="btn-close-stato">Annulla</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+
+{% endblock %}
