@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Lista Richieste{% endblock %}
+
+{% block content %}
+  <h1>Lista delle tue richieste</h1>
+
+    <!-- Trasformare in table -->
+    <!-- Con pulsante per annullare la richiesta, solamente se lo status
+      è ancora "in attesa" -->
+
+  <ul>
+    {% for r in richieste %}
+      <li>
+        Richiesta del {{ r.data_richiesta }}:
+        {{ r.strumento.tipo }}
+        {{ r.strumento.marca }}
+        {{ r.strumento.modello }}
+        (SN: {{ r.strumento.serial_number }})
+        (Status: {{ r.status }})
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

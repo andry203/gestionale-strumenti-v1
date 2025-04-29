@@ -53,5 +53,7 @@ class Richiesta (db.Model):
     status = db.Column(db.Enum('in attesa', 'approvata', 'rifiutata'), nullable=False, default='in attesa')
     note = db.Column(db.Text, nullable=True)
 
+    strumento = db.relationship('Strumento', backref='richieste', lazy=True)
+
     def __repr__(self):
         return f'<Richiesto strumento:{self.id_strumento} da utente:{self.id_utente}>'
