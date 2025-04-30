@@ -26,6 +26,12 @@ def register():
         if Utente.query.filter_by(email=email).first():
             flash ('Email già registrata.', 'warning')
             return redirect(url_for('auth.register'))
+        
+        # Production first user registered == admin
+        # if Utente.query.filter_by(ruolo='admin').count() == 0:
+        #     ruolo = 'admin'
+        # else:
+        #     ruolo = 'user'
 
         # Create and save user
         new_user = Utente(email=email, password=generate_password_hash(pwd))

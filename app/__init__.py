@@ -44,4 +44,8 @@ def create_app():
     app.register_blueprint(richieste.bp)
     app.register_blueprint(dashboard.bp)
 
+    # Super-user creation
+    from app.admin import create_admin
+    app.cli.add_command(create_admin)
+
     return app
