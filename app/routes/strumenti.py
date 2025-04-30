@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_required
 from app import db
-from app.models import Strumento, Richiesta
+from app.models import Strumento, Richiesta, Utente
 from datetime import date
-
+from app.email import send_email
 
 bp = Blueprint('strumenti', __name__, url_prefix='/strumenti')
 
@@ -37,6 +37,18 @@ def richiedi(id):
         db.session.add(req)
         db.session.commit()
         flash('Richiesta inviata.', 'success')
+
+        # Send email to all responsables
+        subject = 'Nuova richiesta di strumento'
+        recipients = Utente.query.filter_by(ruolo='responsabile').with_entities(Utente.email).all()
+        recipients = [recipient[0] for recipient in recipients]
+        text_body = f'Nuova richiesta di strumento da parte di {current_user.email}.\nStrumento: {inst.tipo} {inst.serial_number}\nNote: {note}'
+
+        try:
+            send_email(subject, recipients, text_body)
+            print("Invio riuscito")
+        except Exception as e:
+            print("Errore invio email:", e)
 
     return redirect(url_for('strumenti.index'))
     
