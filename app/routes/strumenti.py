@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from app import db
 from app.models import Strumento, Richiesta, Utente
 from datetime import date
-from app.email import send_email
+from app.email import send_email_async
 
 bp = Blueprint('strumenti', __name__, url_prefix='/strumenti')
 
@@ -45,8 +45,8 @@ def richiedi(id):
         text_body = f'Nuova richiesta di strumento da parte di {current_user.email}.\nStrumento: {inst.tipo} {inst.serial_number}\nNote: {note}'
 
         try:
-            send_email(subject, recipients, text_body)
-            print("Invio riuscito")
+            send_email_async(subject, recipients, text_body)
+            print("Flask mail invio riuscito")
         except Exception as e:
             print("Errore invio email:", e)
 

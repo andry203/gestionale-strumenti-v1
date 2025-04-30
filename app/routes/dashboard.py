@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_required
 from app import db
 from app.models import Strumento, Utente, Richiesta
+from app.email import send_email_async
 from datetime import datetime
 
 
@@ -111,6 +112,19 @@ def aggiorna_status_richiesta(id):
 
     db.session.commit()
     flash(f'Richiesta #{id} marcata come "{new_status}"', 'success')
+
+    # Send email to user whom request is accepted
+    subject = 'Aggiornamento richiesta strumento'
+    user = Utente.query.get(richiesta.id_utente)
+    user_email = user.email
+    text_body = f'La tua richiesta per {richiesta.strumento.tipo} SN:{richiesta.strumento.serial_number} è stata {new_status}'
+
+    try:
+        send_email_async(subject, user_email, text_body)
+        print('Flask mail inviorisucito')
+    except Exception as e:
+        print("Errore invio mail:", e)
+
     return redirect(url_for('dashboard.index'))
 
 
