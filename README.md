@@ -1,34 +1,54 @@
-/gestionale-strumenti
-│
-├── /app
-│   ├── __init__.py
-│   ├── models.py
-│   ├── routes/
-│   │   ├── auth.py
-│   │   ├── strumenti.py
-│   │   ├── richieste.py
-│   │   └── utenti.py
-│   ├── templates/
-|   |   |── base.html
-|   |   |── homepage.html
-|   |   |── register.html
-|   |   |── strumenti/
-|   |       |── index.html
-│   └── static/
-│
-├── config.py
-├── run.py
-├── requirements.txt
-└── README.md
+# Gestionale per strumentazione laboratorio R&D Vertiv
+
+Un'applicazione web per la gestione degli strumenti in uso/in stock e delle calibrazioni.
+
+# Descrizione
+
+L'applicazione permette di:
 
 
-# account per sviluppo 
+# Tecnologie
 
-admin@prova.com
-admin
+- Backend: Python (Flask)
+- Frontend: HTML, CSS, JavaScript
+- Database: MySQL
 
-responsabile@prova.com
-responsabile
+# Installazione
 
-user@prova.com
-user
+Dipendenze scritte in "requirements.txt"
+
+Database MySQL attivo le cui credenziali di accesso sono configurabili in "config.py"
+
+# Struttura del progetto
+
+/gestionale-strumenti-v1
+|--/app
+|----/routes
+|------auth.py
+|------dashboard.py
+|------richieste.py
+|------strumenti.py  
+|----/static
+|------/css
+|------/js
+|--------dashboard.js
+|--------strumenti.js
+|----/templates
+|------base.html
+|------homepage.html
+|------register.html
+|------/dashboard
+|--------admin.html
+|--------responsabile.html
+|------/richieste
+|--------index.html
+|------/strumenti
+|--------index.html
+|----__init__.py
+|----admin.py
+|----email.py
+|----models.py
+|--config.py
+|--run.py
+|--requirements.py
+|--README.md
