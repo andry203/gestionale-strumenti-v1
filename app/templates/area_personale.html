@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Area Personale{% endblock %}
+{% block content %}
+
+  <h1>Area Personale</h1>
+
+    <p>Benvenuto nella tua area personale. Qui puoi gestire il tuo account.</p>
+    
+    <h2>Dettagli Account</h2>
+    <ul>
+        <li><strong>Email:</strong> {{ current_user.email }}</li>
+        <li><strong>Ruolo:</strong> {{ current_user.ruolo }}</li>
+        <li><strong>Domanda di sicurezza:</strong> {{ current_user.q_domanda }}</li>
+    </ul>
+
+    <h2>Modifica Password</h2>
+
+    <form action="{{ url_for('auth.change_password') }}" method="post">
+        <input name="old_password" type="password" placeholder="Password attuale" required style="margin-right:0.5em;">
+        <input name="new_password" type="password" placeholder="Nuova password" required style="margin-right:0.5em;">
+        <button type="submit">Cambia Password</button>
+    </form>
+
+    <h2>Elimina Account</h2>
+    
+    <form action="{{ url_for('auth.delete_account') }}" method="post" style="display:inline;"
+        onsubmit="return confirm('Sei sicuro di voler eliminare il tuo account? Questa operazione è irreversibile.');">
+        <button type="submit" style="background:none;border:none;padding:0;color:#007bff;cursor:pointer;">
+        Elimina account
+        </button>
+    </form>
+
+{% endblock %}

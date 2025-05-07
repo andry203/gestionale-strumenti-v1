@@ -19,19 +19,23 @@
           <input type="hidden" name="next" value="{{ request.path }}">
           <button type="submit">Login</button>
         </form>
+        
         <a href="{{ url_for('auth.register') }}">Non sei registrato? Registrati qui.</a>
+        <a href="#" id="btn-pass-recover" data-recovery-url="{{ url_for('auth.password_recovery') }}">Password dimenticata? Clicca qui</a>
 
       {% else %}
 
         <span style="margin-right:1em;">Ciao, {{ current_user.email }}.</span>
         <a href="{{ url_for('auth.logout') }}" style="margin-right:1em;">Logout</a>
 
-        <form action="{{ url_for('auth.delete_account') }}" method="post" style="display:inline;"
+        <a href="{{ url_for('auth.area_personale') }}" style="margin-right:1em;">Area personale</a>
+
+        <!-- <form action="{{ url_for('auth.delete_account') }}" method="post" style="display:inline;"
             onsubmit="return confirm('Sei sicuro di voler eliminare il tuo account? Questa operazione è irreversibile.');">
           <button type="submit" style="background:none;border:none;padding:0;color:#007bff;cursor:pointer;">
             Elimina account
           </button>
-        </form>
+        </form> -->
       {% endif %}
     </div>
   </header>
@@ -50,7 +54,7 @@
 
     {% block content %}{% endblock %}
 
-    <!-- JS script for flash messages -->
+    <!-- JS script for flash messages
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const flashContainer = document.getElementById('flashes');
@@ -64,7 +68,9 @@
           setTimeout(() => flashContainer.remove(), 500);
         }, 3000);
       });
-    </script>
+    </script> -->
+
+    <script src="{{ url_for('static', filename='js/base.js') }}" defer></script>
 
   </body>
 </html>

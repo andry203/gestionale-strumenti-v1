@@ -12,6 +12,8 @@ class Utente (UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     ruolo = db.Column(db.Enum('admin', 'responsabile', 'user'), nullable=False, default='user')
+    q_domanda  = db.Column(db.String(250), nullable=True)
+    q_risposta = db.Column(db.String(300), nullable=True)
 
     richieste = db.relationship('Richiesta', backref='utente', lazy=True)
 

@@ -3,8 +3,39 @@
 {% block content %}
   <h1>Registrati</h1>
   <form method="post">
-    <label>Email: <input type="email" name="email" required></label><br>
-    <label>Password: <input type="password" name="password" required></label><br>
+    <label>Email: <input type="email" name="email" required></label><br><br>
+    
+    <label>Password: <input type="password" name="password" required></label><br><br>
+
+    <label for="domanda">Domanda di sicurezza</label>
+    <select name="domanda" id="domanda" required>
+      <option value="" disabled selected>-- Seleziona una domanda --</option>
+      <option value="Qual è il nome del tuo primo animale domestico?">
+        Qual è il nome del tuo primo animale domestico?
+      </option>
+      <option value="In che città è nata tua madre?">
+        In che città è nata tua madre?
+      </option>
+      <option value="Qual è il tuo colore preferito?">
+        Qual è il tuo colore preferito?
+      </option>
+      <option value="Qual è il nome della tua scuola elementare?">
+        Qual è il nome della tua scuola elementare?
+      </option>
+      <option value="Qual è il cognome da nubile di tua madre?">
+        Qual è il cognome da nubile di tua madre?
+      </option>
+    </select><br><br>
+
+    <label for="risposta">Risposta</label>
+    <input 
+      type="text" 
+      name="risposta" 
+      id="risposta" 
+      placeholder="Scrivi qui la risposta" 
+      required
+    ><br><br>
+
     <button type="submit">Registrati</button>
   </form>
 {% endblock %}
