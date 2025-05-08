@@ -35,6 +35,7 @@ class Strumento (db.Model):
     caratteristiche = db.Column(db.Text, nullable=True)
     data_calibrazione = db.Column(db.Date, nullable=True)
     status = db.Column(db.Enum('disponibile', 'in uso'), nullable=False, default='disponibile')
+    posizione = db.Column(db.String(100), nullable=True)
     prelevato_da = db.Column(db.Integer, db.ForeignKey('utenti.id'), nullable=True)
     note = db.Column(db.Text, nullable=True)
 

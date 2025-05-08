@@ -11,7 +11,6 @@
   <table id="strumenti-table" border="1" cellpadding="5" cellspacing="0">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Tipo</th>
         <th>Marca</th>
         <th>Modello</th>
@@ -19,6 +18,7 @@
         <th>Caratteristiche</th>
         <th>Data Calibrazione</th>
         <th>Status</th>
+        <th>Posizione</th>
         <th>Prelevato da</th>
         <th>Note</th>
         <th>Richiedi</th>
@@ -27,7 +27,6 @@
     <tbody>
       {% for s in strumenti %}
         <tr>
-          <td>{{ s.id }}</td>
           <td>{{ s.tipo }}</td>
           <td>{{ s.marca }}</td>
           <td>{{ s.modello }}</td>
@@ -41,6 +40,7 @@
             {% endif %}
           </td>
           <td>{{ s.status }}</td>
+          <td>{{ s.posizione }}</td>
           <td>{{ s.prelevato_da or '-' }}</td>
           <td>{{ s.note or '-' }}</td>
           <td>

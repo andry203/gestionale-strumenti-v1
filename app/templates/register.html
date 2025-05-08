@@ -3,11 +3,12 @@
 {% block content %}
   <h1>Registrati</h1>
   <form method="post">
-    <label>Email: <input type="email" name="email" required></label><br><br>
+
+    <label>Email aziendale: <input type="email" name="email" placeholder="mario.rossi@vertiv.com" required></label><br><br>
     
     <label>Password: <input type="password" name="password" required></label><br><br>
 
-    <label for="domanda">Domanda di sicurezza</label>
+    <label for="domanda">Domanda di sicurezza (necessaria per eventuale recupero password)</label>
     <select name="domanda" id="domanda" required>
       <option value="" disabled selected>-- Seleziona una domanda --</option>
       <option value="Qual è il nome del tuo primo animale domestico?">

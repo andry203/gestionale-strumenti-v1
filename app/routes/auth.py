@@ -30,14 +30,15 @@ def register():
             return redirect(url_for('auth.register'))
         
         # Production first user registered == admin
-        # if Utente.query.filter_by(ruolo='admin').count() == 0:
-        #     ruolo = 'admin'
-        # else:
-        #     ruolo = 'user'
+        if Utente.query.filter_by(ruolo='admin').count() == 0:
+            ruolo = 'admin'
+        else:
+            ruolo = 'user'
 
         # Create and save user
         new_user = Utente(email=email,
                           password=generate_password_hash(pwd),
+                          ruolo=ruolo,
                           q_domanda=q_domanda,
                           q_risposta=generate_password_hash(q_risposta))
         db.session.add(new_user)

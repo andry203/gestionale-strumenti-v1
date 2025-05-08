@@ -40,14 +40,20 @@ def aggiungi():
     serial_number = request.form.get('serial_number')
     caratteristiche = request.form.get('caratteristiche')
     data_calib = request.form.get('data_calibrazione')
+    status = request.form.get('status')
+    posizione = request.form.get('posizione')
+    note = request.form.get('note')
 
     nuovo_strumento = Strumento(
         tipo = tipo,
         marca = marca,
         modello = modello,
         serial_number = serial_number,
+        status = status,
+        posizione = posizione,
         caratteristiche = caratteristiche,
-        data_calibrazione = data_calib
+        data_calibrazione = data_calib,
+        note=note
     )
     db.session.add(nuovo_strumento)
     db.session.commit()
@@ -81,8 +87,11 @@ def modifica(id):
     strumento.marca = request.form.get('marca')
     strumento.modello = request.form.get('modello')
     strumento.serial_number = request.form.get('serial_number')
+    strumento.status = request.form.get('status')
+    strumento.posizione = request.form.get('posizione')
     strumento.caratteristiche = request.form.get('caratteristiche')
     strumento.data_calibrazione = request.form.get('data_calibrazione')
+    strumento.note = request.form.get('note')
 
     db.session.commit()
 

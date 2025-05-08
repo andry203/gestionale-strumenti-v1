@@ -53,8 +53,10 @@ document.querySelectorAll('.btn-modifica').forEach(link => {
     formMod.marca.value            = d.marca;
     formMod.modello.value          = d.modello;
     formMod.serial_number.value    = d.serial;
+    formMod.status.value           = d.status;
+    formMod.posizione.value        = d.posizione;
     formMod.caratteristiche.value  = d.caratteristiche || '';
-    formMod.data_calibrazione.value= d.dataCalib || '';
+    formMod.data_calibrazione.value= d.data_calib || '';
     formMod.note.value             = d.note || '';
     // mostra il modal
     modalMod.style.display = 'flex';
@@ -94,8 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const rows  = Array.from(tbody.querySelectorAll('tr'));
   
     rows.sort((a, b) => {
-      const statusA = a.cells[5].textContent.trim();
-      const statusB = b.cells[5].textContent.trim();
+      const statusA = a.cells[6].textContent.trim();
+      const statusB = b.cells[6].textContent.trim();
       if (statusA === 'in attesa' && statusB !== 'in attesa') return -1;
       if (statusA !== 'in attesa' && statusB === 'in attesa') return 1;
       // ordino per data (colonna 4) decrescente

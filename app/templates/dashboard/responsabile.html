@@ -17,7 +17,6 @@
     <table id="strumenti-table" border="1" cellpadding="5" cellspacing="0">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Tipo</th>
             <th>Marca</th>
             <th>Modello</th>
@@ -25,6 +24,7 @@
             <th>Caratteristiche</th>
             <th>Data Calibrazione</th>
             <th>Status</th>
+            <th>Posizione</th>
             <th>Prelevato da</th>
             <th>Note</th>
             <th>Modifica strumento</th>
@@ -34,7 +34,6 @@
         <tbody>
             {% for s in strumenti %}
                 <tr>
-                    <td>{{ s.id }}</td>
                     <td>{{ s.tipo }}</td>
                     <td>{{ s.marca }}</td>
                     <td>{{ s.modello }}</td>
@@ -42,6 +41,7 @@
                     <td class="cell-caratteristiche">{{ s.caratteristiche or '-' }}</td>
                     <td>{{ s.data_calibrazione }}</td>
                     <td>{{ s.status }}</td>
+                    <td>{{ s.posizione }}</td>
                     <td>{{ s.prelevato_da or '-' }}</td>
                     <td>{{ s.note or '-' }}</td>
                     <td>
@@ -52,8 +52,10 @@
                         data-marca="{{ s.marca }}"
                         data-modello="{{ s.modello }}"
                         data-serial="{{ s.serial_number }}"
+                        data-status="{{ s.status }}"
+                        data-posizione="{{ s.posizione }}"
                         data-caratteristiche="{{ s.caratteristiche }}"
-                        data-data_calib="{{ s.data_calibrazione }}"
+                        data-data_calib="{{ s.data_calibrazione and s.data_calibrazione.strftime('%Y-%m-%d') }}"
                         data-note="{{ s.note }}">
                         Modifica
                         </a>
@@ -127,21 +129,33 @@
                 <!-- Se usi CSRF, qui va il token -->
                 <label>Tipo:<br>
                     <input type="text" name="tipo" required>
-                </label><br>
+                </label><br><br>
                 <label>Marca:<br>
                     <input type="text" name="marca" required>
-                </label><br>
+                </label><br><br>
                 <label>Modello:<br>
                     <input type="text" name="modello" required>
-                </label><br>
+                </label><br><br>
                 <label>Serial Number:<br>
                     <input type="text" name="serial_number" required>
-                </label><br>
+                </label><br><br>
                 <label>Caratteristiche:<br>
                     <textarea name="caratteristiche"></textarea>
-                </label><br>
+                </label><br><br>
                 <label>Data calibrazione:<br>
                     <input type="date" name="data_calibrazione">
+                </label><br><br>
+                <label>Status:<br>
+                    <select name="status" required>
+                        <option value="disponibile">Disponibile</option>
+                        <option value="in uso">In uso</option>
+                      </select>
+                </label><br><br>
+                <label>Posizione:<br>
+                    <input type="text" name="posizione" required>
+                </label><br><br>
+                <label>Note:<br>
+                    <textarea name="note"></textarea>
                 </label><br><br>
                 <button type="submit">Salva</button>
                 <button type="button" id="btn-chiudi-aggiungi">Annulla</button>
@@ -156,13 +170,36 @@
         <div style="background:#fff;padding:1em;border-radius:8px;width:320px;">
             <h2>Modifica Strumento</h2>
             <form id="form-modifica" method="post" action="">
-                <label>Tipo:<br><input type="text" name="tipo" required></label><br>
-                <label>Marca:<br><input type="text" name="marca" required></label><br>
-                <label>Modello:<br><input type="text" name="modello" required></label><br>
-                <label>Serial Number:<br><input type="text" name="serial_number" required></label><br>
-                <label>Caratteristiche:<br><textarea name="caratteristiche"></textarea></label><br>
-                <label>Data calibraz.:<br><input type="date" name="data_calibrazione"></label><br>
-                <label>Note:<br><textarea name="note"></textarea></label><br><br>
+                <label>Tipo:<br>
+                    <input type="text" name="tipo" required>
+                </label><br><br>
+                <label>Marca:<br>
+                    <input type="text" name="marca" required>
+                </label><br><br>
+                <label>Modello:<br>
+                    <input type="text" name="modello" required>
+                </label><br><br>
+                <label>Serial Number:<br>
+                    <input type="text" name="serial_number" required>
+                </label><br><br>
+                <label>Caratteristiche:<br>
+                    <textarea name="caratteristiche"></textarea>
+                </label><br><br>
+                <label>Data calibraz.:<br>
+                    <input type="date" name="data_calibrazione">
+                </label><br><br>
+                <label>Status:<br>
+                    <select name="status" required>
+                        <option value="disponibile">Disponibile</option>
+                        <option value="in uso">In uso</option>
+                      </select>
+                </label><br><br>
+                <label>Posizione:<br>
+                    <input type="text" name="posizione" required>
+                </label><br><br>
+                <label>Note:<br>
+                    <textarea name="note"></textarea>
+                </label><br><br><br>
                 <button type="submit">Salva</button>
                 <button type="button" id="btn-chiudi-modifica">Annulla</button>
             </form>
