@@ -39,6 +39,12 @@ class Strumento (db.Model):
     prelevato_da = db.Column(db.Integer, db.ForeignKey('utenti.id'), nullable=True)
     note = db.Column(db.Text, nullable=True)
 
+    prelevato_da_utente = db.relationship(
+        'Utente',
+        foreign_keys=[prelevato_da],
+        backref=db.backref('strumenti_prelevati', lazy='dynamic')
+    )
+
     def __repr__(self):
         return f'<Strumento {self.tipo} {self.serial_number}>'
 
@@ -54,6 +60,7 @@ class Richiesta (db.Model):
     id_strumento = db.Column(db.Integer, db.ForeignKey('strumenti.id'), nullable=False)
     data_richiesta = db.Column(db.Date, nullable=False, default=date.today)
     status = db.Column(db.Enum('in attesa', 'approvata', 'rifiutata'), nullable=False, default='in attesa')
+    destinazione = db.Column(db.String(100), nullable=True)
     note = db.Column(db.Text, nullable=True)
 
     strumento = db.relationship('Strumento', backref='richieste', lazy=True)

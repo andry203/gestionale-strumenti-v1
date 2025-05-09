@@ -118,6 +118,7 @@ def aggiorna_status_richiesta(id):
         strumento = Strumento.query.get(richiesta.id_strumento)
         strumento.status = 'in uso'
         strumento.prelevato_da = richiesta.id_utente
+        strumento.posizione = richiesta.destinazione
 
     db.session.commit()
     flash(f'Richiesta #{id} marcata come "{new_status}"', 'success')
@@ -126,7 +127,7 @@ def aggiorna_status_richiesta(id):
     subject = 'Aggiornamento richiesta strumento'
     user = Utente.query.get(richiesta.id_utente)
     user_email = user.email
-    text_body = f'La tua richiesta per {richiesta.strumento.tipo} SN:{richiesta.strumento.serial_number} è stata {new_status}'
+    text_body = f'La tua richiesta per {richiesta.strumento.tipo} SN:{richiesta.strumento.serial_number} è stata {new_status} da {current_user.email}.'
 
     try:
         send_email_async(subject, user_email, text_body)

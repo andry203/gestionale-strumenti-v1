@@ -42,7 +42,7 @@
                     <td>{{ s.data_calibrazione }}</td>
                     <td>{{ s.status }}</td>
                     <td>{{ s.posizione }}</td>
-                    <td>{{ s.prelevato_da or '-' }}</td>
+                    <td>{{ s.prelevato_da_utente and s.prelevato_da_utente.email or '-' }}</td>
                     <td>{{ s.note or '-' }}</td>
                     <td>
                         <a href="{{ url_for('dashboard.modifica', id=s.id) }}"
@@ -85,6 +85,7 @@
             <th>Serial Number</th>
             <th>Richiesto da</th>
             <th>Data richiesta</th>
+            <th>Destinazione</th>
             <th>Note</th>
             <th>Status</th>
             <th>Modifica</th>
@@ -98,6 +99,7 @@
                     <td>{{ r.strumento.serial_number }}</td>
                     <td>{{ r.utente.email }}</td>
                     <td>{{ r.data_richiesta }}</td>
+                    <td>{{ r.destinazione }}</td>
                     <td>{{ r.note or '-' }}</td>
                     <td>{{ r.status }}</td>
                     <td>

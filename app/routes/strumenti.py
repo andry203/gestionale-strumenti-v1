@@ -27,11 +27,13 @@ def richiedi(id):
     if inst.status != "disponibile":
         flash('Strumento non disponibile al momento.', 'warning')
     else:
+        destinazione = request.form.get('destinazione', None)
         note = request.form.get('note', None)
         req = Richiesta(
             id_utente=current_user.id,
             id_strumento=id,
             data_richiesta=date.today(),
+            destinazione=destinazione,
             note=note
         )
         db.session.add(req)
